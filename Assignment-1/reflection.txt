@@ -1,0 +1,37 @@
+Python vs C Memory Model
+
+Before working with C, I did not think much about what happens in memory when creating variables in Python. When I write x = 42 in Python, 
+it automatically assigns a data type and handles the memory management for me behind the scenes. In C however, I can see more explicitly what is 
+happening because I must assign each variable a data type and each data type has a set memory size. For example, my integer variable occupied 
+4 bytes, my double occupied 8 bytes, and my character variable occupied 1 byte.
+
+The Python lists feature is another example of memory management that Python automatically handles for the user. When I create a list in Python,
+it automatically allocates the memory needed and updates the memory size as more items are added to the list. Based on what I have learned so
+far I hypothesize that python is automatically requesting the anticipated amount of memory needed from the heap, then releasing and readjusting 
+based on the list size. 
+
+I believe it is important for a systems programmer to have a clear understanding of memory segments because a systems programmer is interacting
+with the computer at a lower level and typically required to use languages such as C. A systems programmer also has to be conscious of how much 
+of the total available memory they are taking up when programming an operating system. This is because the programmer needs to ensure that the
+operating system does not take up all of the available memory, leaving nothing else for the end user of the device. On the other hand, a Python
+developer can typically rely on Python itself to optimize and handle all memory management automatically.
+
+
+Memory Observations
+
+When I ran my program, I noticed that the stack, heap, and data segments all had different ranges of memory addresses. In one run, my stack
+variables had addresses around 000000b0d07ff8ec, while my heap allocation was at 000001ce2f4c1470. My global and static variables were located
+around 00007ff782eb2010. In this run, the stack addresses were lower than the heap addresses, while the data segment addresses were higher than
+both. The exact address ranges can vary depending on the system, however I did observe from my results that the different types of memory were 
+stores in their own distinct regions.
+
+After experimenting with both stack and heap, I now have a better understanding of "automatic" and "dynamic" memory allocation. For example, 
+local variables stored on the stack utilize automatic memory allocation that automatically stores and removes the variable when the function is 
+called and then finished. In comparison, storing a variable on the heap requires dynamic memory allocation. This requires explicitly requesting
+memory at runtime of the function and then also explicitly requesting for the memory to be released after you have used it. 
+
+Understanding where variables are stored have helped me deepen my understanding of variable lifetime and scope. Local variables that live on the 
+stack have a lifetime and scope that is limited to the function in which they were created. Global and static variables that live on the data 
+segment have a lifetime that last for the entire program and have a much larger scope, however it can depend on where exactly the variable was 
+declared. Variables stored on the heap have an unlimited lifetime because once it is allocated, it remains until the programmer manually releases 
+it. 
