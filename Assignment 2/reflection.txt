@@ -1,0 +1,44 @@
+### Memory Leak Observations (200-250 words) ###
+
+The memory leak occurred in Part 3A line 178 when memory was allocated inside the loop using malloc() but it was never released using free() 
+before the next iteration. Each time the loop ran, a new block of heap memory was allocated. Since the previous block was never freed, those 
+blocks of memory were unavailable for reuse until the program ended. My output showed approximately 3906 KB of memory was leaked when I ran 
+the executable file. This helped me understand that even if an individual allocation does not seem very large, repeatedly forgetting to free 
+memory can quickly become a much bigger problem. 
+
+If this same code ran in a loop 1000 times, each iteration would allocate additional memory without freeing the previous allocation. By the end 
+of the 1000 iterations, all of those allocations would still be taking up memory. However, once this short program ended, the operating system 
+would reclaim its memory. If the code were to run continuously on a server application for multiple days, the outcome would be much more serious. 
+Instead of the program ending and the memory being reclaimed, the leaked memory would continue accumulating as long as the server remained running. 
+Over time, its memory usage could become extremely large and cause slower performance or eventually run out of available memory and crash.
+
+Part 3B fixed the problem by calling free() after each allocation was used. Instead of allowing the allocations to accumulate, each block of 
+memory was returned so it could be reused later. My output confirmed that approximately 3906 KB was allocated and then freed instead of being
+leaked. 
+
+### Python vs C Memory Management (200-250 words) ###
+
+This assignment helped me understand how much memory management Python normally handles for me. In Python, I can create an inventory and add 
+items without thinking about how much memory the list needs. In C, however, I had to manage all memory manually. I had to request heap memory 
+using malloc(), keep track of the pointer to that allocated memory, check whether the allocation succeeded by checking for NULL, and call free() 
+when the memory was no longer needed. When expanding the inventory, I also had to use realloc() to request a larger amount of memory and make 
+sure I did not lose the original pointer if the reallocation failed. I also had to set pointers to NULL after freeing them to help prevent 
+dangling pointers and double frees.
+
+According to Resource 3, Python handles these responsibilities automatically using reference counting and generational garbage collection. Python 
+keeps track of how many references point to each object. As references are created or removed, Python updates the object's reference count. When 
+that count reaches zero, Python automatically frees the object's memory. Reference counting has difficulty with objects that reference each other 
+in a cycle, so Python also uses generational garbage collection. The garbage collector periodically searches for unreachable cyclic objects and 
+releases their memory. 
+
+### Garbage Collection Trade-offs (100-150 words) ###
+
+Python's automatic memory management makes programming more convenient, however Resource 3 showed me that this convenience comes at a cost. 
+Python must maintain information such as reference counts and garbage-collection data for objects, which requires additional memory. Updating 
+reference counts and periodically searching for unreachable objects also requires CPU time. Garbage collection can even temporarily pause a 
+program while memory is being examined. 
+
+A systems programmer may choose C's manual memory management because it provides more direct control over when memory is allocated and freed. 
+This can be important for operating systems and embedded devices, where CPU power or memory may be limited and unwanted pauses could cause 
+problems. C places more responsibility on the programmer and creates risks such as memory leaks, dangling pointers, and double frees, however, 
+it also avoids the overhead of an automatic garbage collector. 
