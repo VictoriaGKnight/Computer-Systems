@@ -1,0 +1,34 @@
+Structs Vs. Classes
+
+This assignment helped me understand how C structs can be used to simulate some of the features that Python classes provide automatically. 
+In C, I had to define the character’s data inside a struct and then manually add function pointers for the attack and take damage methods. I 
+also had to manually assign those function pointers within my initialization functions. When calling a method in C, I had to explicitly pass the 
+object’s address as the self parameter. In Python, this process is hidden behind the simpler syntax and is not something that the 
+programmer has to think or worry about. 
+
+Based on what I implemented in C, I can understand what is actually happening behind the scenes when you call a method on an object using 
+Python. It first determines which method belongs to that object and provides the object itself as self, which allows the method to access its 
+attributes. My C implementation required me to handle making these connections manually using struct and function pointers. 
+
+Inheritance Implementation
+
+I achieved inheritance in C through composition by placing a character base struct as the first member of both my warrior and mage structs. 
+This gave both derived types the data and function pointers defined by character while also allowing me to add their own new attributes, such 
+as strength and mana. I could then use a warrior or mage as a character by casting its address to a character*.
+
+In Python, I could accomplish this much easier and more directly with Python’s inheritance syntax. Python automatically handles much of the 
+relationship between the parent and child classes. Its inheritance syntax is easier to read and requires less manual code because the programmer 
+does not have to manually embed base structs, perform explicit casts, or recreate the relationship between the types. 
+
+Understanding OOP Mechanics
+
+Function pointers enable polymorphism because the same function pointer can point to different functions depending on the object. In my program, 
+the basic characters attack pointer pointed to character_attack, while the warrior’s pointed pointed to warrior_attack and the mage’s pointer 
+pointed to mage_attack. This allowed me to implement a polymorphism loop that was able to call attack on every character in the same way while 
+producing different results. The basic character performed a basic attack, the warrior used its boosted strength, and the mage had used all of 
+its mana on earlier attacks and reported that they were out of mana. 
+
+Systems programmers might choose to use these patterns because they provide some of the reusability, organization, and flexibility of a standard 
+OOP while still having the explicit control provided by C. Using structs, composition, and function pointers in C allows related data and behavior 
+to be organized together while also maintaining full control over the memory layout and program behavior.
+
